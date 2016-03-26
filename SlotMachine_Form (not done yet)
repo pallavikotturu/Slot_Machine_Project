@@ -1,0 +1,103 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+
+namespace SlotMachine
+    {
+    public partial class frmSlotMachine : Form
+        {
+
+        private int defaultBetAmount = 5;
+
+        public frmSlotMachine()
+            {
+            InitializeComponent();
+            txtBetAmount.Text = Convert.ToString(this.defaultBetAmount);
+            }
+
+        //****************************** PALLAVI **********************************//
+
+
+        private void btnExit_Click(object sender, EventArgs e)
+            {
+            this.Close();
+            }
+
+        Player currentPlayer = new Player();
+
+        
+        private void btnPlus_Click(object sender, EventArgs e)
+            {
+            defaultBetAmount += 1;
+            if((defaultBetAmount > Convert.ToUInt32(currentPlayer.getCashAmount())))
+                {
+                MessageBox.Show("You cannot bet more than the money that you have.  Please try again.");
+                }
+            txtBetAmount.Text = Convert.ToString(defaultBetAmount);
+            //txtCurrentCashAmt.Text = Convert.ToString(currentPlayer.getCashAmount() - defaultBetAmount);
+
+            }
+
+        private void btnMinus_Click(object sender, EventArgs e)
+            {
+            defaultBetAmount -= 1;
+            if ((Convert.ToUInt32(currentPlayer.getCashAmount())) <= 0)
+                {
+                MessageBox.Show("You have no money to decrement.  Please try again.");
+                }
+            else if (defaultBetAmount <= 0)
+                {
+                MessageBox.Show("You must bet something in order to play this game.");
+                }
+            txtBetAmount.Text = Convert.ToString(defaultBetAmount);
+            //txtCurrentCashAmt.Text = Convert.ToString(currentPlayer.getCashAmount() - defaultBetAmount);
+
+            }
+
+        private void btnReset_Click(object sender, EventArgs e)
+            {
+            defaultBetAmount = 5;
+            int oldCashAmount = currentPlayer.getCashAmount();
+            int newCashAmount = Convert.ToInt32(txtBetAmount.Text) + oldCashAmount;
+            txtBetAmount.Text = Convert.ToString(defaultBetAmount);
+            currentPlayer.setCashAmount(newCashAmount);
+            txtCurrentCashAmt.Text = Convert.ToString(currentPlayer.getCashAmount());
+
+            }
+        
+        /// <summary>
+        /// subtracts the bet amount from player cash.  
+        /// The txtBetAmount could later be used if player has winning combo.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnOkay_Click_1(object sender, EventArgs e) 
+            {
+            currentPlayer.setCashAmount(currentPlayer.getCashAmount() - (Convert.ToInt32(txtBetAmount.Text)));
+            btnSpin.Enabled = true;
+            btnReset.Enabled = true;
+            txtCurrentCashAmt.Text = Convert.ToString(currentPlayer.getCashAmount());
+            }
+
+        Play_Table playTable = new Play_Table();
+        private void btnPlayTable_Click(object sender, EventArgs e)
+            {
+            this.Hide();
+            playTable.Show();
+            }
+
+
+
+    
+
+        }
+    }
+    
+
